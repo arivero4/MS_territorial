@@ -1,0 +1,30 @@
+-- Secuencia y tabla para Plaga (Oracle 10g compatible)
+-- Plaga se crea antes de Cultivo y Lote porque ambas tablas de relación la referencian.
+
+CREATE SEQUENCE SEQ_PLAGA
+    START WITH 1
+    INCREMENT BY 1
+    NOCACHE
+    NOCYCLE;
+
+CREATE TABLE TBL_PLAGA (
+    ID                  NUMBER(19,0)    NOT NULL,
+    NOMBRE_CIENTIFICO   VARCHAR2(200),
+    NOMBRE_COMUN        VARCHAR2(200)   NOT NULL,
+    DESCRIPCION         VARCHAR2(500),
+    TIPO                VARCHAR2(100),
+    NIVEL_RIESGO        VARCHAR2(20),
+    SINTOMAS            VARCHAR2(1000),
+    TRATAMIENTO         VARCHAR2(1000),
+    ACTIVO              NUMBER(1,0)     DEFAULT 1 NOT NULL,
+    FECHA_CREACION      DATE            DEFAULT SYSDATE NOT NULL,
+    FECHA_ACTUALIZACION DATE,
+    CONSTRAINT PK_PLAGA              PRIMARY KEY (ID),
+    CONSTRAINT CK_PLAGA_ACTIVO       CHECK (ACTIVO IN (0, 1)),
+    CONSTRAINT CK_PLAGA_NIVEL_RIESGO CHECK (NIVEL_RIESGO IN ('BAJO','MEDIO','ALTO'))
+);
+
+CREATE INDEX IDX_PLAGA_TIPO         ON TBL_PLAGA (TIPO);
+CREATE INDEX IDX_PLAGA_NIVEL_RIESGO ON TBL_PLAGA (NIVEL_RIESGO);
+
+COMMENT ON TABLE TBL_PLAGA IS 'Catálogo de plagas agrícolas con nivel de riesgo';

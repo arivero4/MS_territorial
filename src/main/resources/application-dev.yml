@@ -1,0 +1,36 @@
+spring:
+  datasource:
+    url: jdbc:oracle:thin:@localhost:1522:XE
+    username: territorial
+    password: territorial123
+    hikari:
+      maximum-pool-size: 5
+      minimum-idle: 1
+      connection-test-query: SELECT 1 FROM DUAL
+
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: none
+    properties:
+      hibernate:
+        format_sql: true
+
+  flyway:
+    enabled: false
+
+server:
+  port: 8082
+
+security:
+  jwt:
+    secret: dev-secret-key-territorial-2024-solo-para-desarrollo-local
+    expiration: 604800000
+
+logging:
+  level:
+    territorial: DEBUG
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+    org.springframework.security: DEBUG
+    org.springframework.web: DEBUG

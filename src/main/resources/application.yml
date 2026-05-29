@@ -1,0 +1,77 @@
+spring:
+  application:
+    name: ms-territorial
+  profiles:
+    active: ${SPRING_PROFILES_ACTIVE:dev}
+
+  datasource:
+    url: jdbc:oracle:thin:@${DB_HOST:localhost}:${DB_PORT:1521}:${DB_SID:ORCL}
+    username: ${DB_USER:territorial}
+    password: ${DB_PASSWORD:territorial123}
+    driver-class-name: oracle.jdbc.OracleDriver
+    hikari:
+      maximum-pool-size: ${DB_POOL_MAX:10}
+      minimum-idle: ${DB_POOL_MIN:2}
+      connection-timeout: 30000
+      idle-timeout: 600000
+      max-lifetime: 1800000
+      pool-name: TerritorialHikariPool
+
+  jpa:
+    database-platform: org.hibernate.dialect.Oracle10gDialect
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+    open-in-view: false
+    properties:
+      hibernate:
+        format_sql: false
+        jdbc:
+          batch_size: 20
+          fetch_size: 50
+        order_inserts: true
+        order_updates: true
+
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+    baseline-on-migrate: true
+    baseline-version: 0
+    out-of-order: false
+    validate-on-migrate: true
+
+server:
+  port: ${SERVER_PORT:8080}
+  servlet:
+    context-path: /api/territorial
+  error:
+    include-message: always
+    include-binding-errors: always
+
+security:
+  jwt:
+    secret: ${JWT_SECRET:territorial-jwt-secret-key-2024-muy-larga-y-segura-para-produccion}
+    expiration: ${JWT_EXPIRATION:86400000}
+    header: Authorization
+    prefix: "Bearer "
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+    enabled: true
+  swagger-ui:
+    path: /swagger-ui.html
+    enabled: true
+    operations-sorter: alpha
+    tags-sorter: alpha
+  info:
+    title: MS Territorial API
+    description: Microservicio de gestión territorial agrícola
+    version: 1.0.0
+
+logging:
+  level:
+    territorial: INFO
+    org.hibernate.SQL: WARN
+    org.hibernate.type.descriptor.sql.BasicBinder: WARN
+    org.springframework.security: WARN

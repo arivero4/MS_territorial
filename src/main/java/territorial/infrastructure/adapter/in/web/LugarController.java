@@ -1,0 +1,84 @@
+package territorial.infrastructure.adapter.in.web;
+
+import territorial.application.port.in.GestionarLugarUseCase;
+import territorial.domain.model.LugarProduccion;
+import territorial.infrastructure.adapter.in.web.dto.LugarRequest;
+import territorial.infrastructure.adapter.in.web.dto.LugarResponse;
+import territorial.infrastructure.adapter.in.web.mapper.TerritorialWebMapper;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
+import java.net.URI;
+import java.util.List;
+
+@RestController
+@RequestMapping("/lugares")
+@RequiredArgsConstructor
+@Tag(name = "Lugares de Producción", description = "CRUD de lugares de producción agrícola")
+public class LugarController {
+
+    private final GestionarLugarUseCase gestionarLugar;
+    private final TerritorialWebMapper mapper;
+
+    @GetMapping
+    @Operation(summary = "Listar todos los lugares de producción")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<List<LugarResponse>> listar(
+            @RequestParam(required = false) Long municipioId) {
+        List<LugarProduccion> lugares = municipioId != null
+                ? gestionarLugar.listarPorMunicipio(municipioId)
+                : gestionarLugar.listarTodos();
+        return ResponseEntity.ok(mapper.toLugarResponseList(lugares));
+    }
+
+    @GetMapping("/{id}")
+    @Operation(summary = "Obtener lugar de producción por ID")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<LugarResponse> obtener(@PathVariable Long id) {
+        return ResponseEntity.ok(mapper.toResponse(gestionarLugar.obtenerPorId(id)));
+    }
+
+    @PostMapping
+    @Operation(summary = "Crear lugar de producción")
+    @PreAuthorize("hasAnyRole('ADMIN','OPERADOR')")
+    public ResponseEntity<LugarResponse> crear(@Valid @RequestBody LugarRequest request) {
+        LugarProduccion creado = gestionarLugar.crear(mapper.toDomain(request));
+        return ResponseEntity.created(URI.create("/api/territorial/lugares/" + creado.getId()))
+                .body(mapper.toResponse(creado));
+    }
+
+    @PutMapping("/{id}")
+    @Operation(summary = "Actualizar lugar de producción")
+    @PreAuthorize("hasAnyRole('ADMIN','OPERADOR')")
+    public ResponseEntity<LugarResponse> actualizar(
+            @PathVariable Long id, @Valid @RequestBody LugarRequest request) {
+        return ResponseEntity.ok(mapper.toResponse(gestionarLugar.actualizar(id, mapper.toDomain(request))));
+    }
+
+    @DeleteMapping("/{id}")
+    @Operation(summary = "Eliminar lugar de producción")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Void> eliminar(@PathVariable Long id) {
+        gestionarLugar.eliminar(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping("/{id}/activar")
+    @Operation(summary = "Activar lugar de producción")
+    @PreAuthorize("hasAnyRole('ADMIN','OPERADOR')")
+    public ResponseEntity<LugarResponse> activar(@PathVariable Long id) {
+        return ResponseEntity.ok(mapper.toResponse(gestionarLugar.activar(id)));
+    }
+
+    @PatchMapping("/{id}/desactivar")
+    @Operation(summary = "Desactivar lugar de producción")
+    @PreAuthorize("hasAnyRole('ADMIN','OPERADOR')")
+    public ResponseEntity<LugarResponse> desactivar(@PathVariable Long id) {
+        return ResponseEntity.ok(mapper.toResponse(gestionarLugar.desactivar(id)));
+    }
+}
