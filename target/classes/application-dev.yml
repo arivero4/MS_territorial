@@ -24,7 +24,7 @@ server:
 
 security:
   jwt:
-    secret: dev-secret-key-territorial-2024-solo-para-desarrollo-local
+    secret: dev-secret-key-solo-para-desarrollo-local-32chars
     expiration: 604800000
 
 logging:

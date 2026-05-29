@@ -28,7 +28,7 @@ public class LoteController {
 
     @GetMapping
     @Operation(summary = "Listar lotes")
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("permitAll()")
     public ResponseEntity<List<LoteResponse>> listar(
             @RequestParam(required = false) Long cultivoId,
             @RequestParam(required = false) EstadoLote estado) {
@@ -45,7 +45,7 @@ public class LoteController {
 
     @GetMapping("/{id}")
     @Operation(summary = "Obtener lote por ID")
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("permitAll()")
     public ResponseEntity<LoteResponse> obtener(@PathVariable Long id) {
         return ResponseEntity.ok(mapper.toResponse(gestionarLote.obtenerPorId(id)));
     }

@@ -26,6 +26,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -54,7 +55,7 @@ public class SecurityConfig {
                 .authorizeRequests()
                 .antMatchers(SWAGGER_PATHS).permitAll()
                 .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                .antMatchers(HttpMethod.GET, "/departamentos/**", "/municipios/**").permitAll()
+                .antMatchers(HttpMethod.GET, "/departamentos/**", "/municipios/**", "/lotes/**", "/lugares/**", "/predios/**", "/cultivos/**", "/plagas/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
@@ -96,9 +97,30 @@ public class SecurityConfig {
                     try {
                         String usuario = jwtAdapter.extraerUsuario(token);
                         List<String> roles = jwtAdapter.extraerRoles(token);
-                        List<SimpleGrantedAuthority> authorities = roles.stream()
-                                .map(r -> new SimpleGrantedAuthority("ROLE_" + r))
-                                .collect(Collectors.toList());
+                        List<SimpleGrantedAuthority> authorities = new ArrayList<>();
+                        for (String r : roles) {
+                            String norm = r.replace(" ", "_").toUpperCase();
+                            // Original role
+                            authorities.add(new SimpleGrantedAuthority("ROLE_" + norm));
+                            // Legacy mapping so @PreAuthorize("hasRole('ADMIN')") / ('OPERADOR') still works
+                            switch (norm) {
+                                case "ADMINISTRADOR":
+                                    authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
+                                    authorities.add(new SimpleGrantedAuthority("ROLE_OPERADOR"));
+                                    break;
+                                case "PROPIETARIO":
+                                    authorities.add(new SimpleGrantedAuthority("ROLE_OPERADOR"));
+                                    break;
+                                case "PRODUCTOR":
+                                    authorities.add(new SimpleGrantedAuthority("ROLE_OPERADOR"));
+                                    break;
+                                case "ASISTENTE_TECNICO":
+                                    authorities.add(new SimpleGrantedAuthority("ROLE_OPERADOR"));
+                                    break;
+                                default:
+                                    break;
+                            }
+                        }
                         UsernamePasswordAuthenticationToken auth =
                                 new UsernamePasswordAuthenticationToken(usuario, null, authorities);
                         SecurityContextHolder.getContext().setAuthentication(auth);

@@ -52,7 +52,7 @@ public class JwtAuthenticationAdapter {
     @SuppressWarnings("unchecked")
     public List<String> extraerRoles(String token) {
         Claims claims = extraerClaims(token);
-        Object roles = claims.get("roles");
+        Object roles = claims.get("grupos");
         if (roles instanceof List<?>) {
             return (List<String>) roles;
         }
