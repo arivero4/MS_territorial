@@ -11,14 +11,14 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @Entity
-@Table(name = "TBL_MUNICIPIO",
+@Table(name = "MUNICIPIO",
         uniqueConstraints = @UniqueConstraint(name = "UK_MUNI_CODIGO_DANE", columnNames = "CODIGO_DANE"))
 public class MunicipioEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "gen_municipio")
     @SequenceGenerator(name = "gen_municipio", sequenceName = "SEQ_MUNICIPIO", allocationSize = 1)
-    @Column(name = "ID")
+    @Column(name = "ID_MUNICIPIO")
     private Long id;
 
     @Column(name = "NOMBRE", nullable = false, length = 200)
@@ -27,20 +27,21 @@ public class MunicipioEntity {
     @Column(name = "CODIGO_DANE", nullable = false, length = 10)
     private String codigoDane;
 
-    @Column(name = "ACTIVO", nullable = false)
+    // Kept for backward compatibility with domain mapper; not in new schema
+    @Transient
     private Boolean activo;
 
-    @Column(name = "FECHA_CREACION", nullable = false)
+    @Transient
     private LocalDateTime fechaCreacion;
 
-    @Column(name = "FECHA_ACTUALIZACION")
+    @Transient
     private LocalDateTime fechaActualizacion;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "DEPARTAMENTO_ID", nullable = false,
+    @JoinColumn(name = "ID_DEPARTAMENTO", nullable = false,
             foreignKey = @ForeignKey(name = "FK_MUNICIPIO_DEPARTAMENTO"))
     private DepartamentoEntity departamento;
 
     @OneToMany(mappedBy = "municipio", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<LugarEntity> lugaresProduccion = new ArrayList<>();
+    private List<PredioEntity> predios = new ArrayList<>();
 }

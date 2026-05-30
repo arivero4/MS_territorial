@@ -3,8 +3,10 @@ package territorial.infrastructure.adapter.in.web.dto;
 import lombok.Data;
 
 import javax.validation.constraints.*;
-import java.time.LocalDate;
 
+/**
+ * Diccionario: cultivo (id_cultivo, nombre_variedad, nombre_cientifico, nombre_comun, descripcion)
+ */
 @Data
 public class CultivoRequest {
 
@@ -19,14 +21,7 @@ public class CultivoRequest {
     @Size(max = 200, message = "El nombre común no puede superar 200 caracteres")
     private String nombreComun;
 
+    @NotBlank(message = "La descripción es obligatoria")
     @Size(max = 500, message = "La descripción no puede superar 500 caracteres")
     private String descripcion;
-
-    @NotNull(message = "La fecha de inicio es obligatoria")
-    private LocalDate fechaInicio;
-
-    private LocalDate fechaEstimadaCosecha;
-
-    @NotNull(message = "El predio es obligatorio")
-    private Long predioId;
 }

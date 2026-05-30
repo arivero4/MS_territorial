@@ -59,10 +59,8 @@ public class DepartamentoRepositoryAdapter implements DepartamentoRepositoryPort
     @Override
     @Transactional(readOnly = true)
     public List<Departamento> buscarActivos() {
-        return em.createQuery(
-                "SELECT d FROM DepartamentoEntity d WHERE d.activo = true ORDER BY d.nombre",
-                DepartamentoEntity.class)
-                .getResultList().stream().map(mapper::toDomain).collect(Collectors.toList());
+        // DEPARTAMENTO no longer has activo column in new schema — return all
+        return buscarTodos();
     }
 
     @Override

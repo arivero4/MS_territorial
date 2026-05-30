@@ -9,13 +9,13 @@ import java.time.LocalDateTime;
 @Data
 @NoArgsConstructor
 @Entity
-@Table(name = "TBL_PLAGA")
+@Table(name = "PLAGA")
 public class PlagaEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "gen_plaga")
     @SequenceGenerator(name = "gen_plaga", sequenceName = "SEQ_PLAGA", allocationSize = 1)
-    @Column(name = "ID")
+    @Column(name = "ID_PLAGA")
     private Long id;
 
     @Column(name = "NOMBRE_CIENTIFICO", length = 200)
@@ -24,27 +24,33 @@ public class PlagaEntity {
     @Column(name = "NOMBRE_COMUN", nullable = false, length = 200)
     private String nombreComun;
 
-    @Column(name = "DESCRIPCION", length = 500)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "ID_CULTIVO",
+            foreignKey = @ForeignKey(name = "FK_PLAGA_CULTIVO"))
+    private CultivoEntity cultivo;
+
+    // Fields not in new schema — kept transient for domain mapper compatibility
+    @Transient
     private String descripcion;
 
-    @Column(name = "TIPO", length = 100)
+    @Transient
     private String tipo;
 
-    @Column(name = "NIVEL_RIESGO", length = 20)
+    @Transient
     private String nivelRiesgo;
 
-    @Column(name = "SINTOMAS", length = 1000)
+    @Transient
     private String sintomas;
 
-    @Column(name = "TRATAMIENTO", length = 1000)
+    @Transient
     private String tratamiento;
 
-    @Column(name = "ACTIVO", nullable = false)
+    @Transient
     private Boolean activo;
 
-    @Column(name = "FECHA_CREACION", nullable = false)
+    @Transient
     private LocalDateTime fechaCreacion;
 
-    @Column(name = "FECHA_ACTUALIZACION")
+    @Transient
     private LocalDateTime fechaActualizacion;
 }

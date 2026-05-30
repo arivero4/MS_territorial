@@ -47,18 +47,15 @@ public class LugarRepositoryAdapter implements LugarRepositoryPort {
     @Override
     @Transactional(readOnly = true)
     public List<LugarProduccion> buscarPorMunicipioId(Long municipioId) {
-        return em.createQuery(
-                "SELECT l FROM LugarEntity l WHERE l.municipio.id = :mId ORDER BY l.nombre",
-                LugarEntity.class)
-                .setParameter("mId", municipioId)
-                .getResultList().stream().map(mapper::toDomain).collect(Collectors.toList());
+        // Lugar no longer has municipio FK in new schema — return all
+        return buscarTodos();
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<LugarProduccion> buscarActivos() {
         return em.createQuery(
-                "SELECT l FROM LugarEntity l WHERE l.activo = true ORDER BY l.nombre",
+                "SELECT l FROM LugarEntity l WHERE l.estado = 'ACTIVO' ORDER BY l.nombre",
                 LugarEntity.class)
                 .getResultList().stream().map(mapper::toDomain).collect(Collectors.toList());
     }

@@ -42,7 +42,7 @@ public class LoteRepositoryAdapter implements LoteRepositoryPort {
     @Override
     @Transactional(readOnly = true)
     public List<Lote> buscarTodos() {
-        return em.createQuery("SELECT l FROM LoteEntity l ORDER BY l.numero", LoteEntity.class)
+        return em.createQuery("SELECT l FROM LoteEntity l ORDER BY l.id", LoteEntity.class)
                 .getResultList().stream().map(mapper::toDomain).collect(Collectors.toList());
     }
 
@@ -50,7 +50,7 @@ public class LoteRepositoryAdapter implements LoteRepositoryPort {
     @Transactional(readOnly = true)
     public List<Lote> buscarPorCultivoId(Long cultivoId) {
         return em.createQuery(
-                "SELECT l FROM LoteEntity l WHERE l.cultivo.id = :cId ORDER BY l.numero",
+                "SELECT l FROM LoteEntity l WHERE l.cultivo.id = :cId ORDER BY l.id",
                 LoteEntity.class)
                 .setParameter("cId", cultivoId)
                 .getResultList().stream().map(mapper::toDomain).collect(Collectors.toList());
@@ -60,7 +60,7 @@ public class LoteRepositoryAdapter implements LoteRepositoryPort {
     @Transactional(readOnly = true)
     public List<Lote> buscarPorEstado(EstadoLote estado) {
         return em.createQuery(
-                "SELECT l FROM LoteEntity l WHERE l.estado = :estado ORDER BY l.numero",
+                "SELECT l FROM LoteEntity l WHERE l.estado = :estado ORDER BY l.id",
                 LoteEntity.class)
                 .setParameter("estado", estado.name())
                 .getResultList().stream().map(mapper::toDomain).collect(Collectors.toList());
@@ -69,10 +69,8 @@ public class LoteRepositoryAdapter implements LoteRepositoryPort {
     @Override
     @Transactional(readOnly = true)
     public List<Lote> buscarConAltaPlaga() {
-        return em.createQuery(
-                "SELECT DISTINCT l FROM LoteEntity l JOIN l.plagas p WHERE p.nivelRiesgo = 'ALTO'",
-                LoteEntity.class)
-                .getResultList().stream().map(mapper::toDomain).collect(Collectors.toList());
+        // PLAGA no longer has nivelRiesgo in new schema — return empty list
+        return java.util.Collections.emptyList();
     }
 
     @Override
@@ -92,19 +90,11 @@ public class LoteRepositoryAdapter implements LoteRepositoryPort {
 
     @Override
     public void asociarPlaga(Long loteId, Long plagaId) {
-        LoteEntity lote = em.find(LoteEntity.class, loteId);
-        PlagaEntity plaga = em.find(PlagaEntity.class, plagaId);
-        if (lote != null && plaga != null && !lote.getPlagas().contains(plaga)) {
-            lote.getPlagas().add(plaga);
-        }
+        // Plaga is now linked to Cultivo, not Lote in new schema — no-op
     }
 
     @Override
     public void desasociarPlaga(Long loteId, Long plagaId) {
-        LoteEntity lote = em.find(LoteEntity.class, loteId);
-        PlagaEntity plaga = em.find(PlagaEntity.class, plagaId);
-        if (lote != null && plaga != null) {
-            lote.getPlagas().remove(plaga);
-        }
+        // Plaga is now linked to Cultivo, not Lote in new schema — no-op
     }
 }

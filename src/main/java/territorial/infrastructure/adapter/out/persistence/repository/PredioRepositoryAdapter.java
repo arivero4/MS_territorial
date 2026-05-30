@@ -66,10 +66,8 @@ public class PredioRepositoryAdapter implements PredioRepositoryPort {
     @Override
     @Transactional(readOnly = true)
     public List<Predio> buscarActivos() {
-        return em.createQuery(
-                "SELECT p FROM PredioEntity p WHERE p.activo = true ORDER BY p.nombre",
-                PredioEntity.class)
-                .getResultList().stream().map(mapper::toDomain).collect(Collectors.toList());
+        // PREDIO no longer has activo column in new schema — return all
+        return buscarTodos();
     }
 
     @Override

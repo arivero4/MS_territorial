@@ -29,10 +29,11 @@ public class PredioSpecification {
             sb.append(" AND p.lugarProduccion.id = :lugarProduccionId");
         }
         if (municipioId != null) {
-            sb.append(" AND p.lugarProduccion.municipio.id = :municipioId");
+            // Predio now has direct municipio FK in new schema
+            sb.append(" AND p.municipio.id = :municipioId");
         }
         if (departamentoId != null) {
-            sb.append(" AND p.lugarProduccion.municipio.departamento.id = :departamentoId");
+            sb.append(" AND p.municipio.departamento.id = :departamentoId");
         }
         if (areaMinima != null) {
             sb.append(" AND p.area >= :areaMinima");
@@ -40,9 +41,7 @@ public class PredioSpecification {
         if (areaMaxima != null) {
             sb.append(" AND p.area <= :areaMaxima");
         }
-        if (activo != null) {
-            sb.append(" AND p.activo = :activo");
-        }
+        // activo removed from new schema — skip filter
         if (vereda != null && !vereda.isBlank()) {
             sb.append(" AND UPPER(p.vereda) LIKE UPPER(:vereda)");
         }

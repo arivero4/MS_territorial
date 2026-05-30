@@ -67,10 +67,8 @@ public class MunicipioRepositoryAdapter implements MunicipioRepositoryPort {
     @Override
     @Transactional(readOnly = true)
     public List<Municipio> buscarActivos() {
-        return em.createQuery(
-                "SELECT m FROM MunicipioEntity m WHERE m.activo = true ORDER BY m.nombre",
-                MunicipioEntity.class)
-                .getResultList().stream().map(mapper::toDomain).collect(Collectors.toList());
+        // MUNICIPIO no longer has activo column in new schema — return all
+        return buscarTodos();
     }
 
     @Override

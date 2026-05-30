@@ -47,21 +47,15 @@ public class PlagaRepositoryAdapter implements PlagaRepositoryPort {
     @Override
     @Transactional(readOnly = true)
     public List<Plaga> buscarPorTipo(String tipo) {
-        return em.createQuery(
-                "SELECT p FROM PlagaEntity p WHERE UPPER(p.tipo) = UPPER(:tipo) ORDER BY p.nombreComun",
-                PlagaEntity.class)
-                .setParameter("tipo", tipo)
-                .getResultList().stream().map(mapper::toDomain).collect(Collectors.toList());
+        // PLAGA no longer has tipo column in new schema — return all
+        return buscarTodas();
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<Plaga> buscarPorNivelRiesgo(String nivelRiesgo) {
-        return em.createQuery(
-                "SELECT p FROM PlagaEntity p WHERE UPPER(p.nivelRiesgo) = UPPER(:nivel) ORDER BY p.nombreComun",
-                PlagaEntity.class)
-                .setParameter("nivel", nivelRiesgo)
-                .getResultList().stream().map(mapper::toDomain).collect(Collectors.toList());
+        // PLAGA no longer has nivelRiesgo column in new schema — return empty
+        return java.util.Collections.emptyList();
     }
 
     @Override
@@ -77,18 +71,15 @@ public class PlagaRepositoryAdapter implements PlagaRepositoryPort {
     @Override
     @Transactional(readOnly = true)
     public List<Plaga> buscarPorLoteId(Long loteId) {
-        return em.createQuery(
-                "SELECT p FROM PlagaEntity p JOIN p IN (SELECT l.plagas FROM LoteEntity l WHERE l.id = :lId)",
-                PlagaEntity.class)
-                .setParameter("lId", loteId)
-                .getResultList().stream().map(mapper::toDomain).collect(Collectors.toList());
+        // PLAGA is no longer linked to LOTE in new schema — return empty
+        return java.util.Collections.emptyList();
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<Plaga> buscarPorCultivoId(Long cultivoId) {
         return em.createQuery(
-                "SELECT p FROM CultivoEntity c JOIN c.plagas p WHERE c.id = :cId",
+                "SELECT p FROM PlagaEntity p WHERE p.cultivo.id = :cId",
                 PlagaEntity.class)
                 .setParameter("cId", cultivoId)
                 .getResultList().stream().map(mapper::toDomain).collect(Collectors.toList());

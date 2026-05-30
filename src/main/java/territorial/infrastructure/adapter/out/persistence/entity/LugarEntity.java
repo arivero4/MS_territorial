@@ -11,50 +11,56 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @Entity
-@Table(name = "TBL_LUGAR_PRODUCCION")
+@Table(name = "LUGAR_PRODUCCION")
 public class LugarEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "gen_lugar")
     @SequenceGenerator(name = "gen_lugar", sequenceName = "SEQ_LUGAR_PRODUCCION", allocationSize = 1)
-    @Column(name = "ID")
+    @Column(name = "ID_LUGAR")
     private Long id;
 
     @Column(name = "NOMBRE", nullable = false, length = 200)
     private String nombre;
 
-    @Column(name = "DESCRIPCION", length = 500)
-    private String descripcion;
-
-    @Column(name = "AREA")
+    @Column(name = "AREA", nullable = false)
     private Double area;
 
-    @Column(name = "VEREDA", length = 150)
+    @Column(name = "ESTADO", nullable = false, length = 50)
+    private String estado;
+
+    @Column(name = "ID_PRIVILEGIO_GRUPO", nullable = false)
+    private Long idPrivilegioGrupo;
+
+    // Fields not present in new schema — kept transient for domain mapper compatibility
+    @Transient
+    private String descripcion;
+
+    @Transient
     private String vereda;
 
-    @Column(name = "LATITUD")
+    @Transient
     private Double latitud;
 
-    @Column(name = "LONGITUD")
+    @Transient
     private Double longitud;
 
-    @Column(name = "ALTITUD")
+    @Transient
     private Double altitud;
 
-    @Column(name = "ACTIVO", nullable = false)
+    @Transient
     private Boolean activo;
 
-    @Column(name = "FECHA_CREACION", nullable = false)
+    @Transient
     private LocalDateTime fechaCreacion;
 
-    @Column(name = "FECHA_ACTUALIZACION")
+    @Transient
     private LocalDateTime fechaActualizacion;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "MUNICIPIO_ID", nullable = false,
-            foreignKey = @ForeignKey(name = "FK_LUGAR_MUNICIPIO"))
+    // Municipio relationship removed from new schema
+    @Transient
     private MunicipioEntity municipio;
 
     @OneToMany(mappedBy = "lugarProduccion", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<PredioEntity> predios = new ArrayList<>();
+    private List<LoteEntity> lotes = new ArrayList<>();
 }

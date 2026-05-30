@@ -4,6 +4,10 @@ import lombok.Data;
 
 import javax.validation.constraints.*;
 
+/**
+ * Diccionario: predio (id_predio, nombre, num_predial, area, vereda, latitud, longitud,
+ *                      id_privilegio_grupo, id_municipio, id_lugar_produccion)
+ */
 @Data
 public class PredioRequest {
 
@@ -11,26 +15,27 @@ public class PredioRequest {
     @Size(max = 200, message = "El nombre no puede superar 200 caracteres")
     private String nombre;
 
-    @Size(max = 30, message = "El número predial no puede superar 30 caracteres")
+    @NotBlank(message = "El número predial es obligatorio")
+    @Size(max = 50, message = "El número predial no puede superar 50 caracteres")
     private String numeroPredial;
 
-    @Size(max = 50, message = "La matrícula inmobiliaria no puede superar 50 caracteres")
-    private String matriculaInmobiliaria;
-
+    @NotNull(message = "El área es obligatoria")
     @Positive(message = "El área debe ser un valor positivo")
     private Double area;
 
+    @NotBlank(message = "La vereda es obligatoria")
     @Size(max = 150, message = "La vereda no puede superar 150 caracteres")
     private String vereda;
-
-    @Size(max = 500, message = "La descripción no puede superar 500 caracteres")
-    private String descripcion;
 
     private Double latitud;
 
     private Double longitud;
 
-    private Double altitud;
+    // Referencia externa al privilegio de grupo
+    private Long idPrivilegioGrupo;
+
+    @NotNull(message = "El municipio es obligatorio")
+    private Long municipioId;
 
     @NotNull(message = "El lugar de producción es obligatorio")
     private Long lugarProduccionId;

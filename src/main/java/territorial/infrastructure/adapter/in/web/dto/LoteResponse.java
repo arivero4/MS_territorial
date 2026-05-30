@@ -30,6 +30,8 @@ public class LoteResponse {
     private Double altitud;
     private Long cultivoId;
     private String cultivoNombre;
+    private Long idLugar;
+    private String lugarNombre;
     private List<PlagaResponse> plagas;
     private LocalDateTime fechaCreacion;
     private LocalDateTime fechaActualizacion;

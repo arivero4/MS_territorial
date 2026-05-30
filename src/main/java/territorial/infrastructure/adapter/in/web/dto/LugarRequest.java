@@ -4,6 +4,9 @@ import lombok.Data;
 
 import javax.validation.constraints.*;
 
+/**
+ * Diccionario: lugar_produccion (id_lugar, nombre, area, estado, id_privilegio_grupo)
+ */
 @Data
 public class LugarRequest {
 
@@ -11,21 +14,13 @@ public class LugarRequest {
     @Size(max = 200, message = "El nombre no puede superar 200 caracteres")
     private String nombre;
 
-    @Size(max = 500, message = "La descripción no puede superar 500 caracteres")
-    private String descripcion;
-
+    @NotNull(message = "El área es obligatoria")
     @Positive(message = "El área debe ser un valor positivo")
     private Double area;
 
-    @Size(max = 150, message = "La vereda no puede superar 150 caracteres")
-    private String vereda;
+    @NotBlank(message = "El estado es obligatorio")
+    private String estado;
 
-    private Double latitud;
-
-    private Double longitud;
-
-    private Double altitud;
-
-    @NotNull(message = "El municipio es obligatorio")
-    private Long municipioId;
+    // Referencia externa al privilegio de grupo (microservicio usuarios)
+    private Long idPrivilegioGrupo;
 }

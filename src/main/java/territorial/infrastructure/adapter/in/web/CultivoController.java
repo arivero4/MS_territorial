@@ -19,7 +19,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/cultivos")
 @RequiredArgsConstructor
-@Tag(name = "Cultivos", description = "CRUD de cultivos y asociación con plagas")
+@Tag(name = "Cultivos", description = "CRUD de cultivos y asociaciÃ³n con plagas")
 public class CultivoController {
 
     private final GestionarCultivoUseCase gestionarCultivo;
@@ -27,7 +27,7 @@ public class CultivoController {
 
     @GetMapping
     @Operation(summary = "Listar cultivos")
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("permitAll()")
     public ResponseEntity<List<CultivoResponse>> listar(
             @RequestParam(required = false) Long predioId,
             @RequestParam(required = false) Boolean enTemporada) {
@@ -44,7 +44,7 @@ public class CultivoController {
 
     @GetMapping("/{id}")
     @Operation(summary = "Obtener cultivo por ID")
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("permitAll()")
     public ResponseEntity<CultivoResponse> obtener(@PathVariable Long id) {
         return ResponseEntity.ok(mapper.toResponse(gestionarCultivo.obtenerPorId(id)));
     }
@@ -104,3 +104,4 @@ public class CultivoController {
         return ResponseEntity.ok(mapper.toResponse(gestionarCultivo.desasociarPlaga(cultivoId, plagaId)));
     }
 }
+

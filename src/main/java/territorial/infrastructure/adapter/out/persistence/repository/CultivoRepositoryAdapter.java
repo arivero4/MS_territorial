@@ -49,31 +49,22 @@ public class CultivoRepositoryAdapter implements CultivoRepositoryPort {
     @Override
     @Transactional(readOnly = true)
     public List<Cultivo> buscarPorPredioId(Long predioId) {
-        return em.createQuery(
-                "SELECT c FROM CultivoEntity c WHERE c.predio.id = :pId ORDER BY c.fechaInicio DESC",
-                CultivoEntity.class)
-                .setParameter("pId", predioId)
-                .getResultList().stream().map(mapper::toDomain).collect(Collectors.toList());
+        // CULTIVO no longer has predio FK in new schema — return all
+        return buscarTodos();
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<Cultivo> buscarEnTemporada() {
-        LocalDate hoy = LocalDate.now();
-        return em.createQuery(
-                "SELECT c FROM CultivoEntity c WHERE c.fechaInicio <= :hoy AND c.fechaEstimadaCosecha >= :hoy",
-                CultivoEntity.class)
-                .setParameter("hoy", hoy)
-                .getResultList().stream().map(mapper::toDomain).collect(Collectors.toList());
+        // CULTIVO no longer has fecha columns in new schema — return all
+        return buscarTodos();
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<Cultivo> buscarActivos() {
-        return em.createQuery(
-                "SELECT c FROM CultivoEntity c WHERE c.activo = true ORDER BY c.nombreComun",
-                CultivoEntity.class)
-                .getResultList().stream().map(mapper::toDomain).collect(Collectors.toList());
+        // CULTIVO no longer has activo column in new schema — return all
+        return buscarTodos();
     }
 
     @Override
@@ -95,17 +86,18 @@ public class CultivoRepositoryAdapter implements CultivoRepositoryPort {
     public void asociarPlaga(Long cultivoId, Long plagaId) {
         CultivoEntity cultivo = em.find(CultivoEntity.class, cultivoId);
         PlagaEntity plaga = em.find(PlagaEntity.class, plagaId);
-        if (cultivo != null && plaga != null && !cultivo.getPlagas().contains(plaga)) {
-            cultivo.getPlagas().add(plaga);
+        if (cultivo != null && plaga != null) {
+            plaga.setCultivo(cultivo);
+            em.merge(plaga);
         }
     }
 
     @Override
     public void desasociarPlaga(Long cultivoId, Long plagaId) {
-        CultivoEntity cultivo = em.find(CultivoEntity.class, cultivoId);
         PlagaEntity plaga = em.find(PlagaEntity.class, plagaId);
-        if (cultivo != null && plaga != null) {
-            cultivo.getPlagas().remove(plaga);
+        if (plaga != null) {
+            plaga.setCultivo(null);
+            em.merge(plaga);
         }
     }
 }

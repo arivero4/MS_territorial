@@ -12,17 +12,14 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @Entity
-@Table(name = "TBL_LOTE")
+@Table(name = "LOTE")
 public class LoteEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "gen_lote")
     @SequenceGenerator(name = "gen_lote", sequenceName = "SEQ_LOTE", allocationSize = 1)
-    @Column(name = "ID")
+    @Column(name = "ID_LOTE")
     private Long id;
-
-    @Column(name = "NUMERO", nullable = false, length = 50)
-    private String numero;
 
     @Column(name = "NOMBRE", length = 200)
     private String nombre;
@@ -30,43 +27,47 @@ public class LoteEntity {
     @Column(name = "AREA")
     private Double area;
 
-    @Column(name = "ESTADO", nullable = false, length = 30)
-    private String estado;
-
     @Column(name = "FECHA_SIEMBRA")
     private LocalDate fechaSiembra;
 
-    @Column(name = "FECHA_COSECHA_ESTIMADA")
+    @Column(name = "ESTADO", nullable = false, length = 30)
+    private String estado;
+
+    @Column(name = "FECHA_COSECHA_EST")
     private LocalDate fechaCosechaEstimada;
 
-    @Column(name = "FECHA_COSECHA_REAL")
-    private LocalDate fechaCosechaReal;
-
-    @Column(name = "LATITUD")
-    private Double latitud;
-
-    @Column(name = "LONGITUD")
-    private Double longitud;
-
-    @Column(name = "ALTITUD")
-    private Double altitud;
-
-    @Column(name = "FECHA_CREACION", nullable = false)
-    private LocalDateTime fechaCreacion;
-
-    @Column(name = "FECHA_ACTUALIZACION")
-    private LocalDateTime fechaActualizacion;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "ID_LUGAR",
+            foreignKey = @ForeignKey(name = "FK_LOTE_LUGAR"))
+    private LugarEntity lugarProduccion;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "CULTIVO_ID", nullable = false,
+    @JoinColumn(name = "ID_CULTIVO",
             foreignKey = @ForeignKey(name = "FK_LOTE_CULTIVO"))
     private CultivoEntity cultivo;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "TBL_LOTE_PLAGA",
-            joinColumns = @JoinColumn(name = "LOTE_ID", foreignKey = @ForeignKey(name = "FK_LP_LOTE")),
-            inverseJoinColumns = @JoinColumn(name = "PLAGA_ID", foreignKey = @ForeignKey(name = "FK_LP_PLAGA"))
-    )
+    // Fields not in new schema — kept transient for domain mapper compatibility
+    @Transient
+    private String numero;
+
+    @Transient
+    private LocalDate fechaCosechaReal;
+
+    @Transient
+    private Double latitud;
+
+    @Transient
+    private Double longitud;
+
+    @Transient
+    private Double altitud;
+
+    @Transient
+    private LocalDateTime fechaCreacion;
+
+    @Transient
+    private LocalDateTime fechaActualizacion;
+
+    @Transient
     private List<PlagaEntity> plagas = new ArrayList<>();
 }

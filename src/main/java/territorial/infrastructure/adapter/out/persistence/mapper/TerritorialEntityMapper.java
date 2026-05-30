@@ -27,9 +27,7 @@ public class TerritorialEntityMapper {
                 .id(e.getId())
                 .nombre(e.getNombre())
                 .codigoDane(e.getCodigoDane() != null ? CodigoDane.deSinValidar(e.getCodigoDane()) : null)
-                .activo(e.getActivo())
-                .fechaCreacion(e.getFechaCreacion())
-                .fechaActualizacion(e.getFechaActualizacion())
+                .activo(true)
                 .build();
     }
 
@@ -39,9 +37,6 @@ public class TerritorialEntityMapper {
         e.setId(d.getId());
         e.setNombre(d.getNombre());
         e.setCodigoDane(d.getCodigoDane() != null ? d.getCodigoDane().getCodigo() : null);
-        e.setActivo(d.getActivo());
-        e.setFechaCreacion(d.getFechaCreacion());
-        e.setFechaActualizacion(d.getFechaActualizacion());
         return e;
     }
 
@@ -54,9 +49,7 @@ public class TerritorialEntityMapper {
                 .nombre(e.getNombre())
                 .codigoDane(e.getCodigoDane() != null ? CodigoDane.deSinValidar(e.getCodigoDane()) : null)
                 .departamento(toDomain(e.getDepartamento()))
-                .activo(e.getActivo())
-                .fechaCreacion(e.getFechaCreacion())
-                .fechaActualizacion(e.getFechaActualizacion())
+                .activo(true)
                 .build();
     }
 
@@ -66,9 +59,6 @@ public class TerritorialEntityMapper {
         e.setId(d.getId());
         e.setNombre(d.getNombre());
         e.setCodigoDane(d.getCodigoDane() != null ? d.getCodigoDane().getCodigo() : null);
-        e.setActivo(d.getActivo());
-        e.setFechaCreacion(d.getFechaCreacion());
-        e.setFechaActualizacion(d.getFechaActualizacion());
         if (d.getDepartamento() != null) {
             e.setDepartamento(toEntity(d.getDepartamento()));
         }
@@ -82,14 +72,8 @@ public class TerritorialEntityMapper {
         return LugarProduccion.builder()
                 .id(e.getId())
                 .nombre(e.getNombre())
-                .descripcion(e.getDescripcion())
                 .area(e.getArea())
-                .vereda(e.getVereda())
-                .coordenadas(buildCoordenadas(e.getLatitud(), e.getLongitud(), e.getAltitud()))
-                .municipio(toDomain(e.getMunicipio()))
-                .activo(e.getActivo())
-                .fechaCreacion(e.getFechaCreacion())
-                .fechaActualizacion(e.getFechaActualizacion())
+                .activo(e.getEstado() != null && !"INACTIVO".equalsIgnoreCase(e.getEstado()))
                 .build();
     }
 
@@ -98,20 +82,10 @@ public class TerritorialEntityMapper {
         LugarEntity e = new LugarEntity();
         e.setId(d.getId());
         e.setNombre(d.getNombre());
-        e.setDescripcion(d.getDescripcion());
-        e.setArea(d.getArea());
-        e.setVereda(d.getVereda());
-        e.setActivo(d.getActivo());
-        e.setFechaCreacion(d.getFechaCreacion());
-        e.setFechaActualizacion(d.getFechaActualizacion());
-        if (d.getCoordenadas() != null) {
-            e.setLatitud(d.getCoordenadas().getLatitud());
-            e.setLongitud(d.getCoordenadas().getLongitud());
-            e.setAltitud(d.getCoordenadas().getAltitud());
-        }
-        if (d.getMunicipio() != null) {
-            e.setMunicipio(toEntity(d.getMunicipio()));
-        }
+        e.setArea(d.getArea() != null ? d.getArea() : 0.0);
+        e.setEstado(Boolean.FALSE.equals(d.getActivo()) ? "INACTIVO" : "ACTIVO");
+        // id_privilegio_grupo defaults to 1 if not set (required NOT NULL)
+        e.setIdPrivilegioGrupo(1L);
         return e;
     }
 
@@ -123,15 +97,11 @@ public class TerritorialEntityMapper {
                 .id(e.getId())
                 .nombre(e.getNombre())
                 .numeroPredial(e.getNumeroPredial())
-                .matriculaInmobiliaria(e.getMatriculaInmobiliaria())
                 .area(e.getArea())
                 .vereda(e.getVereda())
-                .descripcion(e.getDescripcion())
-                .coordenadas(buildCoordenadas(e.getLatitud(), e.getLongitud(), e.getAltitud()))
+                .coordenadas(buildCoordenadas(e.getLatitud(), e.getLongitud(), null))
                 .lugarProduccion(toDomain(e.getLugarProduccion()))
-                .activo(e.getActivo())
-                .fechaCreacion(e.getFechaCreacion())
-                .fechaActualizacion(e.getFechaActualizacion())
+                .activo(true)
                 .build();
     }
 
@@ -141,20 +111,25 @@ public class TerritorialEntityMapper {
         e.setId(d.getId());
         e.setNombre(d.getNombre());
         e.setNumeroPredial(d.getNumeroPredial());
-        e.setMatriculaInmobiliaria(d.getMatriculaInmobiliaria());
         e.setArea(d.getArea());
         e.setVereda(d.getVereda());
-        e.setDescripcion(d.getDescripcion());
-        e.setActivo(d.getActivo());
-        e.setFechaCreacion(d.getFechaCreacion());
-        e.setFechaActualizacion(d.getFechaActualizacion());
+        // Latitud/longitud NOT NULL in new schema - default 0 if not provided
         if (d.getCoordenadas() != null) {
-            e.setLatitud(d.getCoordenadas().getLatitud());
-            e.setLongitud(d.getCoordenadas().getLongitud());
-            e.setAltitud(d.getCoordenadas().getAltitud());
+            e.setLatitud(d.getCoordenadas().getLatitud() != null ? d.getCoordenadas().getLatitud() : 0.0);
+            e.setLongitud(d.getCoordenadas().getLongitud() != null ? d.getCoordenadas().getLongitud() : 0.0);
+        } else {
+            e.setLatitud(0.0);
+            e.setLongitud(0.0);
         }
+        e.setIdPrivilegioGrupo(1L);
         if (d.getLugarProduccion() != null) {
             e.setLugarProduccion(toEntity(d.getLugarProduccion()));
+        }
+        // Map id_municipio FK (diccionario: predio.id_municipio required)
+        if (d.getIdMunicipio() != null) {
+            MunicipioEntity m = new MunicipioEntity();
+            m.setId(d.getIdMunicipio());
+            e.setMunicipio(m);
         }
         return e;
     }
@@ -169,12 +144,7 @@ public class TerritorialEntityMapper {
                 .nombreCientifico(e.getNombreCientifico())
                 .nombreComun(e.getNombreComun())
                 .descripcion(e.getDescripcion())
-                .fechaInicio(e.getFechaInicio())
-                .fechaEstimadaCosecha(e.getFechaEstimadaCosecha())
-                .predio(toDomain(e.getPredio()))
-                .activo(e.getActivo())
-                .fechaCreacion(e.getFechaCreacion())
-                .fechaActualizacion(e.getFechaActualizacion())
+                .activo(true)
                 .build();
     }
 
@@ -186,14 +156,6 @@ public class TerritorialEntityMapper {
         e.setNombreCientifico(d.getNombreCientifico());
         e.setNombreComun(d.getNombreComun());
         e.setDescripcion(d.getDescripcion());
-        e.setFechaInicio(d.getFechaInicio());
-        e.setFechaEstimadaCosecha(d.getFechaEstimadaCosecha());
-        e.setActivo(d.getActivo());
-        e.setFechaCreacion(d.getFechaCreacion());
-        e.setFechaActualizacion(d.getFechaActualizacion());
-        if (d.getPredio() != null) {
-            e.setPredio(toEntity(d.getPredio()));
-        }
         return e;
     }
 
@@ -201,42 +163,44 @@ public class TerritorialEntityMapper {
 
     public Lote toDomain(LoteEntity e) {
         if (e == null) return null;
-        return Lote.builder()
+        Lote.LoteBuilder b = Lote.builder()
                 .id(e.getId())
-                .numero(e.getNumero())
                 .nombre(e.getNombre())
                 .area(e.getArea())
                 .estado(e.getEstado() != null ? EstadoLote.valueOf(e.getEstado()) : null)
                 .fechaSiembra(e.getFechaSiembra())
                 .fechaCosechaEstimada(e.getFechaCosechaEstimada())
-                .fechaCosechaReal(e.getFechaCosechaReal())
-                .coordenadas(buildCoordenadas(e.getLatitud(), e.getLongitud(), e.getAltitud()))
-                .cultivo(toDomain(e.getCultivo()))
-                .fechaCreacion(e.getFechaCreacion())
-                .fechaActualizacion(e.getFechaActualizacion())
-                .build();
+                .cultivo(toDomain(e.getCultivo()));
+        if (e.getLugarProduccion() != null) {
+            b.lugarProduccion(toDomain(e.getLugarProduccion()))
+             .idLugar(e.getLugarProduccion().getId());
+        }
+        return b.build();
     }
 
     public LoteEntity toEntity(Lote d) {
         if (d == null) return null;
         LoteEntity e = new LoteEntity();
         e.setId(d.getId());
-        e.setNumero(d.getNumero());
         e.setNombre(d.getNombre());
         e.setArea(d.getArea());
-        e.setEstado(d.getEstado() != null ? d.getEstado().name() : null);
+        e.setEstado(d.getEstado() != null ? d.getEstado().name() : "ACTIVO");
         e.setFechaSiembra(d.getFechaSiembra());
         e.setFechaCosechaEstimada(d.getFechaCosechaEstimada());
-        e.setFechaCosechaReal(d.getFechaCosechaReal());
-        e.setFechaCreacion(d.getFechaCreacion());
-        e.setFechaActualizacion(d.getFechaActualizacion());
-        if (d.getCoordenadas() != null) {
-            e.setLatitud(d.getCoordenadas().getLatitud());
-            e.setLongitud(d.getCoordenadas().getLongitud());
-            e.setAltitud(d.getCoordenadas().getAltitud());
-        }
         if (d.getCultivo() != null) {
             e.setCultivo(toEntity(d.getCultivo()));
+        }
+        // Map id_lugar FK (diccionario: lote.id_lugar required)
+        if (d.getLugarProduccion() != null) {
+            e.setLugarProduccion(toEntity(d.getLugarProduccion()));
+        } else if (d.getIdLugar() != null) {
+            LugarEntity l = new LugarEntity();
+            l.setId(d.getIdLugar());
+            l.setNombre("");
+            l.setArea(0.0);
+            l.setEstado("ACTIVO");
+            l.setIdPrivilegioGrupo(1L);
+            e.setLugarProduccion(l);
         }
         return e;
     }
@@ -249,14 +213,7 @@ public class TerritorialEntityMapper {
                 .id(e.getId())
                 .nombreCientifico(e.getNombreCientifico())
                 .nombreComun(e.getNombreComun())
-                .descripcion(e.getDescripcion())
-                .tipo(e.getTipo())
-                .nivelRiesgo(e.getNivelRiesgo())
-                .sintomas(e.getSintomas())
-                .tratamiento(e.getTratamiento())
-                .activo(e.getActivo())
-                .fechaCreacion(e.getFechaCreacion())
-                .fechaActualizacion(e.getFechaActualizacion())
+                .activo(true)
                 .build();
     }
 
@@ -266,14 +223,12 @@ public class TerritorialEntityMapper {
         e.setId(d.getId());
         e.setNombreCientifico(d.getNombreCientifico());
         e.setNombreComun(d.getNombreComun());
-        e.setDescripcion(d.getDescripcion());
-        e.setTipo(d.getTipo());
-        e.setNivelRiesgo(d.getNivelRiesgo());
-        e.setSintomas(d.getSintomas());
-        e.setTratamiento(d.getTratamiento());
-        e.setActivo(d.getActivo());
-        e.setFechaCreacion(d.getFechaCreacion());
-        e.setFechaActualizacion(d.getFechaActualizacion());
+        // Map id_cultivo FK (diccionario: plaga.id_cultivo required)
+        if (d.getIdCultivo() != null) {
+            CultivoEntity c = new CultivoEntity();
+            c.setId(d.getIdCultivo());
+            e.setCultivo(c);
+        }
         return e;
     }
 

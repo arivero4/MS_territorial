@@ -89,16 +89,10 @@ public class TerritorialWebMapper {
         if (req == null) return null;
         LugarProduccion d = new LugarProduccion();
         d.setNombre(req.getNombre());
-        d.setDescripcion(req.getDescripcion());
         d.setArea(req.getArea());
-        d.setVereda(req.getVereda());
-        if (req.getLatitud() != null && req.getLongitud() != null) {
-            d.setCoordenadas(Coordenadas.de(req.getLatitud(), req.getLongitud(), req.getAltitud()));
-        }
-        if (req.getMunicipioId() != null) {
-            Municipio m = new Municipio();
-            m.setId(req.getMunicipioId());
-            d.setMunicipio(m);
+        // estado se maneja como 'activo' en dominio
+        if (req.getEstado() != null) {
+            d.setActivo("ACTIVO".equalsIgnoreCase(req.getEstado()));
         }
         return d;
     }
@@ -142,17 +136,18 @@ public class TerritorialWebMapper {
         Predio d = new Predio();
         d.setNombre(req.getNombre());
         d.setNumeroPredial(req.getNumeroPredial());
-        d.setMatriculaInmobiliaria(req.getMatriculaInmobiliaria());
         d.setArea(req.getArea());
         d.setVereda(req.getVereda());
-        d.setDescripcion(req.getDescripcion());
         if (req.getLatitud() != null && req.getLongitud() != null) {
-            d.setCoordenadas(Coordenadas.de(req.getLatitud(), req.getLongitud(), req.getAltitud()));
+            d.setCoordenadas(Coordenadas.de(req.getLatitud(), req.getLongitud(), null));
         }
         if (req.getLugarProduccionId() != null) {
             LugarProduccion l = new LugarProduccion();
             l.setId(req.getLugarProduccionId());
             d.setLugarProduccion(l);
+        }
+        if (req.getMunicipioId() != null) {
+            d.setIdMunicipio(req.getMunicipioId());
         }
         return d;
     }
@@ -200,13 +195,7 @@ public class TerritorialWebMapper {
         d.setNombreCientifico(req.getNombreCientifico());
         d.setNombreComun(req.getNombreComun());
         d.setDescripcion(req.getDescripcion());
-        d.setFechaInicio(req.getFechaInicio());
-        d.setFechaEstimadaCosecha(req.getFechaEstimadaCosecha());
-        if (req.getPredioId() != null) {
-            Predio p = new Predio();
-            p.setId(req.getPredioId());
-            d.setPredio(p);
-        }
+        // Diccionario: cultivo no tiene predio ni fechas como campos directos
         return d;
     }
 
@@ -245,19 +234,20 @@ public class TerritorialWebMapper {
     public Lote toDomain(LoteRequest req) {
         if (req == null) return null;
         Lote d = new Lote();
-        d.setNumero(req.getNumero());
         d.setNombre(req.getNombre());
         d.setArea(req.getArea());
         d.setEstado(req.getEstado());
         d.setFechaSiembra(req.getFechaSiembra());
         d.setFechaCosechaEstimada(req.getFechaCosechaEstimada());
-        if (req.getLatitud() != null && req.getLongitud() != null) {
-            d.setCoordenadas(Coordenadas.de(req.getLatitud(), req.getLongitud(), req.getAltitud()));
-        }
         if (req.getCultivoId() != null) {
             Cultivo c = new Cultivo();
             c.setId(req.getCultivoId());
             d.setCultivo(c);
+        }
+        if (req.getIdLugar() != null) {
+            LugarProduccion l = new LugarProduccion();
+            l.setId(req.getIdLugar());
+            d.setLugarProduccion(l);
         }
         return d;
     }
@@ -285,6 +275,12 @@ public class TerritorialWebMapper {
             r.setCultivoId(d.getCultivo().getId());
             r.setCultivoNombre(d.getCultivo().getNombreComun());
         }
+        if (d.getLugarProduccion() != null) {
+            r.setIdLugar(d.getLugarProduccion().getId());
+            r.setLugarNombre(d.getLugarProduccion().getNombre());
+        } else if (d.getIdLugar() != null) {
+            r.setIdLugar(d.getIdLugar());
+        }
         if (d.getPlagas() != null) {
             r.setPlagas(d.getPlagas().stream().map(this::toResponse).collect(Collectors.toList()));
         }
@@ -303,11 +299,7 @@ public class TerritorialWebMapper {
         Plaga d = new Plaga();
         d.setNombreComun(req.getNombreComun());
         d.setNombreCientifico(req.getNombreCientifico());
-        d.setDescripcion(req.getDescripcion());
-        d.setTipo(req.getTipo());
-        d.setNivelRiesgo(req.getNivelRiesgo());
-        d.setSintomas(req.getSintomas());
-        d.setTratamiento(req.getTratamiento());
+        d.setIdCultivo(req.getIdCultivo());
         return d;
     }
 

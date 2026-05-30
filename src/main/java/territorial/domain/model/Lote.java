@@ -28,6 +28,8 @@ public class Lote {
     private LocalDate fechaCosechaReal;
     private Coordenadas coordenadas;
     private Cultivo cultivo;
+    private Long idLugar;         // Diccionario: lote.id_lugar FK directa
+    private LugarProduccion lugarProduccion;  // Para el mapeo completo
     private LocalDateTime fechaCreacion;
     private LocalDateTime fechaActualizacion;
 

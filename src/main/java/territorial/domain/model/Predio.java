@@ -25,6 +25,7 @@ public class Predio {
     private String descripcion;
     private Coordenadas coordenadas;
     private LugarProduccion lugarProduccion;
+    private Long idMunicipio;     // Diccionario: predio.id_municipio FK directa
     private Boolean activo;
     private LocalDateTime fechaCreacion;
     private LocalDateTime fechaActualizacion;

@@ -22,6 +22,7 @@ public class Plaga {
     private String sintomas;
     private String tratamiento;
     private Boolean activo;
+    private Long idCultivo;   // Diccionario: plaga.id_cultivo FK directa
     private LocalDateTime fechaCreacion;
     private LocalDateTime fechaActualizacion;
 

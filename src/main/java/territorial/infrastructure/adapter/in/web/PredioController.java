@@ -27,7 +27,7 @@ public class PredioController {
 
     @GetMapping
     @Operation(summary = "Listar predios")
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("permitAll()")
     public ResponseEntity<List<PredioResponse>> listar(
             @RequestParam(required = false) Long lugarProduccionId) {
         List<Predio> predios = lugarProduccionId != null
@@ -38,14 +38,14 @@ public class PredioController {
 
     @GetMapping("/{id}")
     @Operation(summary = "Obtener predio por ID")
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("permitAll()")
     public ResponseEntity<PredioResponse> obtener(@PathVariable Long id) {
         return ResponseEntity.ok(mapper.toResponse(gestionarPredio.obtenerPorId(id)));
     }
 
     @GetMapping("/buscar")
-    @Operation(summary = "Buscar predio por número predial")
-    @PreAuthorize("isAuthenticated()")
+    @Operation(summary = "Buscar predio por nÃºmero predial")
+    @PreAuthorize("permitAll()")
     public ResponseEntity<List<PredioResponse>> buscarPorNumeroPredial(
             @RequestParam String numeroPredial) {
         return ResponseEntity.ok(mapper.toPredioResponseList(
@@ -91,3 +91,4 @@ public class PredioController {
         return ResponseEntity.ok(mapper.toResponse(gestionarPredio.desactivar(id)));
     }
 }
+

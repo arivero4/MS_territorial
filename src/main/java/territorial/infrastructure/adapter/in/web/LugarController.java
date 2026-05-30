@@ -19,15 +19,15 @@ import java.util.List;
 @RestController
 @RequestMapping("/lugares")
 @RequiredArgsConstructor
-@Tag(name = "Lugares de Producción", description = "CRUD de lugares de producción agrícola")
+@Tag(name = "Lugares de ProducciÃ³n", description = "CRUD de lugares de producciÃ³n agrÃ­cola")
 public class LugarController {
 
     private final GestionarLugarUseCase gestionarLugar;
     private final TerritorialWebMapper mapper;
 
     @GetMapping
-    @Operation(summary = "Listar todos los lugares de producción")
-    @PreAuthorize("isAuthenticated()")
+    @Operation(summary = "Listar todos los lugares de producciÃ³n")
+    @PreAuthorize("permitAll()")
     public ResponseEntity<List<LugarResponse>> listar(
             @RequestParam(required = false) Long municipioId) {
         List<LugarProduccion> lugares = municipioId != null
@@ -37,14 +37,14 @@ public class LugarController {
     }
 
     @GetMapping("/{id}")
-    @Operation(summary = "Obtener lugar de producción por ID")
-    @PreAuthorize("isAuthenticated()")
+    @Operation(summary = "Obtener lugar de producciÃ³n por ID")
+    @PreAuthorize("permitAll()")
     public ResponseEntity<LugarResponse> obtener(@PathVariable Long id) {
         return ResponseEntity.ok(mapper.toResponse(gestionarLugar.obtenerPorId(id)));
     }
 
     @PostMapping
-    @Operation(summary = "Crear lugar de producción")
+    @Operation(summary = "Crear lugar de producciÃ³n")
     @PreAuthorize("hasAnyRole('ADMIN','OPERADOR')")
     public ResponseEntity<LugarResponse> crear(@Valid @RequestBody LugarRequest request) {
         LugarProduccion creado = gestionarLugar.crear(mapper.toDomain(request));
@@ -53,7 +53,7 @@ public class LugarController {
     }
 
     @PutMapping("/{id}")
-    @Operation(summary = "Actualizar lugar de producción")
+    @Operation(summary = "Actualizar lugar de producciÃ³n")
     @PreAuthorize("hasAnyRole('ADMIN','OPERADOR')")
     public ResponseEntity<LugarResponse> actualizar(
             @PathVariable Long id, @Valid @RequestBody LugarRequest request) {
@@ -61,7 +61,7 @@ public class LugarController {
     }
 
     @DeleteMapping("/{id}")
-    @Operation(summary = "Eliminar lugar de producción")
+    @Operation(summary = "Eliminar lugar de producciÃ³n")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> eliminar(@PathVariable Long id) {
         gestionarLugar.eliminar(id);
@@ -69,16 +69,17 @@ public class LugarController {
     }
 
     @PatchMapping("/{id}/activar")
-    @Operation(summary = "Activar lugar de producción")
+    @Operation(summary = "Activar lugar de producciÃ³n")
     @PreAuthorize("hasAnyRole('ADMIN','OPERADOR')")
     public ResponseEntity<LugarResponse> activar(@PathVariable Long id) {
         return ResponseEntity.ok(mapper.toResponse(gestionarLugar.activar(id)));
     }
 
     @PatchMapping("/{id}/desactivar")
-    @Operation(summary = "Desactivar lugar de producción")
+    @Operation(summary = "Desactivar lugar de producciÃ³n")
     @PreAuthorize("hasAnyRole('ADMIN','OPERADOR')")
     public ResponseEntity<LugarResponse> desactivar(@PathVariable Long id) {
         return ResponseEntity.ok(mapper.toResponse(gestionarLugar.desactivar(id)));
     }
 }
+

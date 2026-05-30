@@ -12,13 +12,13 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @Entity
-@Table(name = "TBL_CULTIVO")
+@Table(name = "CULTIVO")
 public class CultivoEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "gen_cultivo")
     @SequenceGenerator(name = "gen_cultivo", sequenceName = "SEQ_CULTIVO", allocationSize = 1)
-    @Column(name = "ID")
+    @Column(name = "ID_CULTIVO")
     private Long id;
 
     @Column(name = "NOMBRE_VARIEDAD", nullable = false, length = 200)
@@ -33,34 +33,29 @@ public class CultivoEntity {
     @Column(name = "DESCRIPCION", length = 500)
     private String descripcion;
 
-    @Column(name = "FECHA_INICIO")
+    // Fields not in new schema — kept transient for domain mapper compatibility
+    @Transient
     private LocalDate fechaInicio;
 
-    @Column(name = "FECHA_ESTIMADA_COSECHA")
+    @Transient
     private LocalDate fechaEstimadaCosecha;
 
-    @Column(name = "ACTIVO", nullable = false)
+    @Transient
     private Boolean activo;
 
-    @Column(name = "FECHA_CREACION", nullable = false)
+    @Transient
     private LocalDateTime fechaCreacion;
 
-    @Column(name = "FECHA_ACTUALIZACION")
+    @Transient
     private LocalDateTime fechaActualizacion;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "PREDIO_ID", nullable = false,
-            foreignKey = @ForeignKey(name = "FK_CULTIVO_PREDIO"))
+    // Predio FK removed from new schema
+    @Transient
     private PredioEntity predio;
 
     @OneToMany(mappedBy = "cultivo", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<LoteEntity> lotes = new ArrayList<>();
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "TBL_CULTIVO_PLAGA",
-            joinColumns = @JoinColumn(name = "CULTIVO_ID", foreignKey = @ForeignKey(name = "FK_CP_CULTIVO")),
-            inverseJoinColumns = @JoinColumn(name = "PLAGA_ID", foreignKey = @ForeignKey(name = "FK_CP_PLAGA"))
-    )
+    @OneToMany(mappedBy = "cultivo", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<PlagaEntity> plagas = new ArrayList<>();
 }

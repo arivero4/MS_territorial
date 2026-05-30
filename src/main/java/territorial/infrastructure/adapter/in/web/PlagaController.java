@@ -19,7 +19,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/plagas")
 @RequiredArgsConstructor
-@Tag(name = "Plagas", description = "Catálogo de plagas agrícolas")
+@Tag(name = "Plagas", description = "CatÃ¡logo de plagas agrÃ­colas")
 public class PlagaController {
 
     private final GestionarPlagaUseCase gestionarPlaga;
@@ -27,7 +27,7 @@ public class PlagaController {
 
     @GetMapping
     @Operation(summary = "Listar plagas")
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("permitAll()")
     public ResponseEntity<List<PlagaResponse>> listar(
             @RequestParam(required = false) String tipo,
             @RequestParam(required = false) String nivelRiesgo,
@@ -47,13 +47,13 @@ public class PlagaController {
 
     @GetMapping("/{id}")
     @Operation(summary = "Obtener plaga por ID")
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("permitAll()")
     public ResponseEntity<PlagaResponse> obtener(@PathVariable Long id) {
         return ResponseEntity.ok(mapper.toResponse(gestionarPlaga.obtenerPorId(id)));
     }
 
     @PostMapping
-    @Operation(summary = "Crear plaga en el catálogo")
+    @Operation(summary = "Crear plaga en el catÃ¡logo")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<PlagaResponse> crear(@Valid @RequestBody PlagaRequest request) {
         Plaga creada = gestionarPlaga.crear(mapper.toDomain(request));
@@ -70,10 +70,11 @@ public class PlagaController {
     }
 
     @DeleteMapping("/{id}")
-    @Operation(summary = "Eliminar plaga del catálogo")
+    @Operation(summary = "Eliminar plaga del catÃ¡logo")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> eliminar(@PathVariable Long id) {
         gestionarPlaga.eliminar(id);
         return ResponseEntity.noContent().build();
     }
 }
+
