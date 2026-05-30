@@ -173,10 +173,14 @@ public class TerritorialWebMapper {
         if (d.getLugarProduccion() != null) {
             r.setLugarProduccionId(d.getLugarProduccion().getId());
             r.setLugarProduccionNombre(d.getLugarProduccion().getNombre());
-            if (d.getLugarProduccion().getMunicipio() != null) {
-                r.setMunicipioId(d.getLugarProduccion().getMunicipio().getId());
-                r.setMunicipioNombre(d.getLugarProduccion().getMunicipio().getNombre());
-            }
+        }
+        // Nuevo esquema: municipio viene de predio.id_municipio (FK directa)
+        if (d.getIdMunicipio() != null) {
+            r.setMunicipioId(d.getIdMunicipio());
+        } else if (d.getLugarProduccion() != null && d.getLugarProduccion().getMunicipio() != null) {
+            // Fallback: legacy path
+            r.setMunicipioId(d.getLugarProduccion().getMunicipio().getId());
+            r.setMunicipioNombre(d.getLugarProduccion().getMunicipio().getNombre());
         }
         return r;
     }
@@ -315,6 +319,8 @@ public class TerritorialWebMapper {
                 .sintomas(d.getSintomas())
                 .tratamiento(d.getTratamiento())
                 .activo(d.getActivo())
+                // Diccionario: plaga.id_cultivo
+                .idCultivo(d.getIdCultivo())
                 .fechaCreacion(d.getFechaCreacion())
                 .fechaActualizacion(d.getFechaActualizacion())
                 .build();

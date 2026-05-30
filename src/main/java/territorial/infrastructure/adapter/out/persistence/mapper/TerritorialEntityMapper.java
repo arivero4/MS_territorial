@@ -93,7 +93,7 @@ public class TerritorialEntityMapper {
 
     public Predio toDomain(PredioEntity e) {
         if (e == null) return null;
-        return Predio.builder()
+        Predio.PredioBuilder b = Predio.builder()
                 .id(e.getId())
                 .nombre(e.getNombre())
                 .numeroPredial(e.getNumeroPredial())
@@ -101,8 +101,12 @@ public class TerritorialEntityMapper {
                 .vereda(e.getVereda())
                 .coordenadas(buildCoordenadas(e.getLatitud(), e.getLongitud(), null))
                 .lugarProduccion(toDomain(e.getLugarProduccion()))
-                .activo(true)
-                .build();
+                .activo(true);
+        // Incluir idMunicipio del nuevo esquema (predio.id_municipio FK)
+        if (e.getMunicipio() != null) {
+            b.idMunicipio(e.getMunicipio().getId());
+        }
+        return b.build();
     }
 
     public PredioEntity toEntity(Predio d) {
@@ -209,12 +213,16 @@ public class TerritorialEntityMapper {
 
     public Plaga toDomain(PlagaEntity e) {
         if (e == null) return null;
-        return Plaga.builder()
+        Plaga.PlagaBuilder b = Plaga.builder()
                 .id(e.getId())
                 .nombreCientifico(e.getNombreCientifico())
                 .nombreComun(e.getNombreComun())
-                .activo(true)
-                .build();
+                .activo(true);
+        // Incluir idCultivo desde la FK del nuevo esquema
+        if (e.getCultivo() != null) {
+            b.idCultivo(e.getCultivo().getId());
+        }
+        return b.build();
     }
 
     public PlagaEntity toEntity(Plaga d) {
