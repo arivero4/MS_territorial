@@ -16,6 +16,12 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
+/**
+ * Controlador REST que expone los endpoints de gestión de lotes de cultivo.
+ *
+ * <p>Base URL: {@code /api/territorial/lotes}. Gestiona el ciclo de vida
+ * completo del lote: creación, cambio de estado e inspecciones asociadas.</p>
+ */
 
 @RestController
 @RequestMapping("/lotes")

@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+/** DTO de salida con el lote, cultivo, lugar de produccion y estado. */
 
 @Data
 @Builder
@@ -32,7 +33,7 @@ public class LoteResponse {
     private String cultivoNombre;
     private Long idLugar;
     private String lugarNombre;
-    private List<PlagaResponse> plagas;
+    // plagas eliminadas de LoteResponse: las plagas pertenecen al Cultivo, no al Lote
     private LocalDateTime fechaCreacion;
     private LocalDateTime fechaActualizacion;
 }

@@ -15,6 +15,12 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
+/**
+ * Controlador REST para el catálogo de plagas fitosanitarias.
+ *
+ * <p>Base URL: {@code /api/territorial/plagas}. Las plagas se asocian a cultivos
+ * específicos y son seleccionables por el AT durante el conteo en vivo.</p>
+ */
 
 @RestController
 @RequestMapping("/plagas")

@@ -7,6 +7,7 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+/** Entidad JPA mapeada a la tabla Oracle PREDIO. FKs: ID_MUNICIPIO e ID_LUGAR_PRODUCCION. */
 
 @Data
 @NoArgsConstructor

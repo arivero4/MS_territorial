@@ -2,6 +2,7 @@ package territorial.infrastructure.adapter.out.persistence.specification;
 
 import lombok.Builder;
 import lombok.Data;
+/** Especificaciones JPA Criteria para filtros dinamicos de busqueda de predios. */
 
 @Data
 @Builder

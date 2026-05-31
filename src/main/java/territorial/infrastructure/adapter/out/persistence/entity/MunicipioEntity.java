@@ -13,6 +13,7 @@ import java.util.List;
 @Entity
 @Table(name = "MUNICIPIO",
         uniqueConstraints = @UniqueConstraint(name = "UK_MUNI_CODIGO_DANE", columnNames = "CODIGO_DANE"))
+/** Entidad JPA mapeada a la tabla Oracle MUNICIPIO. FK ID_DEPARTAMENTO hacia DepartamentoEntity. */
 public class MunicipioEntity {
 
     @Id

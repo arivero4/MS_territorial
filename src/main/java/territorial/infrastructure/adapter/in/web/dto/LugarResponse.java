@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+/** DTO de salida con los datos del lugar de produccion. */
 
 @Data
 @Builder
@@ -22,10 +23,8 @@ public class LugarResponse {
     private Double longitud;
     private Double altitud;
     private Boolean activo;
-    private Long municipioId;
-    private String municipioNombre;
-    private Long departamentoId;
-    private String departamentoNombre;
+    // municipioId/departamentoId eliminados: LugarProduccion NO tiene municipio directo
+    // La cadena es: Municipio → Predio → LugarProduccion → Lote
     private LocalDateTime fechaCreacion;
     private LocalDateTime fechaActualizacion;
 }

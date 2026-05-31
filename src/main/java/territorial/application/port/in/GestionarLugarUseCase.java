@@ -4,6 +4,12 @@ import territorial.domain.model.LugarProduccion;
 
 import java.util.List;
 
+/**
+ * Puerto de entrada (caso de uso) para la gestión de Lugares de Producción.
+ *
+ * <p>Un lugar de producción (finca) contiene los lotes donde se realizan
+ * las inspecciones fitosanitarias. Implementado por {@link territorial.application.service.LugarService}.</p>
+ */
 public interface GestionarLugarUseCase {
 
     LugarProduccion crear(LugarProduccion lugar);

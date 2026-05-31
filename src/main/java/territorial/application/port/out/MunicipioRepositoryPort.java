@@ -6,6 +6,12 @@ import territorial.domain.valueobject.CodigoDane;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Puerto de salida (repositorio) para la persistencia de municipios.
+ *
+ * <p>Implementado por
+ * {@link territorial.infrastructure.adapter.out.persistence.repository.MunicipioRepositoryAdapter}.</p>
+ */
 public interface MunicipioRepositoryPort {
 
     Municipio guardar(Municipio municipio);

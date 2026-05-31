@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+/** DTO de salida: nombre cientifico, tipo, nivel de riesgo y cultivo afectado. */
 
 @Data
 @Builder

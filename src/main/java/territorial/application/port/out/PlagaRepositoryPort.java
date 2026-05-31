@@ -5,6 +5,12 @@ import territorial.domain.model.Plaga;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Puerto de salida (repositorio) para la persistencia del catálogo de plagas.
+ *
+ * <p>Implementado por
+ * {@link territorial.infrastructure.adapter.out.persistence.repository.PlagaRepositoryAdapter}.</p>
+ */
 public interface PlagaRepositoryPort {
 
     Plaga guardar(Plaga plaga);

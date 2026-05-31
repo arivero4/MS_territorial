@@ -5,6 +5,7 @@ import lombok.Data;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+/** DTO de entrada para crear o actualizar un departamento. */
 
 @Data
 public class DepartamentoRequest {

@@ -12,6 +12,7 @@ import javax.persistence.EntityManager;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+/** Adaptador JPA que implementa PlagaRepositoryPort. Gestiona catalogo de plagas. */
 
 @Repository
 @RequiredArgsConstructor

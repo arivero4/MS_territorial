@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+/** Entidad JPA mapeada a la tabla Oracle PLAGA. FK ID_CULTIVO hacia CultivoEntity. */
 
 @Data
 @NoArgsConstructor

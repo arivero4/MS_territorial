@@ -11,9 +11,16 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * Mapper exclusivo de la capa web (adaptador de entrada).
- * Convierte entre objetos de dominio y DTOs (requests/responses HTTP).
- * No conoce nada de la capa de persistencia (entities, JPA).
+ * Mapper de la capa web: convierte entre objetos de dominio y DTOs HTTP.
+ *
+ * <p>Responsabilidades:</p>
+ * <ul>
+ *   <li>{@code toDomain(Request)} — convierte el request entrante al modelo de dominio.</li>
+ *   <li>{@code toResponse(Domain)} — convierte el modelo de dominio al response saliente.</li>
+ * </ul>
+ *
+ * <p>No conoce nada de JPA ni de la capa de persistencia. Solo trabaja con
+ * las clases del paquete {@code territorial.domain.model.*} y los DTOs.</p>
  */
 @Component
 public class TerritorialWebMapper {
@@ -113,14 +120,7 @@ public class TerritorialWebMapper {
             r.setLongitud(d.getCoordenadas().getLongitud());
             r.setAltitud(d.getCoordenadas().getAltitud());
         }
-        if (d.getMunicipio() != null) {
-            r.setMunicipioId(d.getMunicipio().getId());
-            r.setMunicipioNombre(d.getMunicipio().getNombre());
-            if (d.getMunicipio().getDepartamento() != null) {
-                r.setDepartamentoId(d.getMunicipio().getDepartamento().getId());
-                r.setDepartamentoNombre(d.getMunicipio().getDepartamento().getNombre());
-            }
-        }
+        // LugarProduccion NO tiene municipio directo: Municipio → Predio → LugarProduccion
         return r;
     }
 
@@ -147,7 +147,9 @@ public class TerritorialWebMapper {
             d.setLugarProduccion(l);
         }
         if (req.getMunicipioId() != null) {
-            d.setIdMunicipio(req.getMunicipioId());
+            Municipio m = new Municipio();
+            m.setId(req.getMunicipioId());
+            d.setMunicipio(m);
         }
         return d;
     }
@@ -174,13 +176,14 @@ public class TerritorialWebMapper {
             r.setLugarProduccionId(d.getLugarProduccion().getId());
             r.setLugarProduccionNombre(d.getLugarProduccion().getNombre());
         }
-        // Nuevo esquema: municipio viene de predio.id_municipio (FK directa)
-        if (d.getIdMunicipio() != null) {
-            r.setMunicipioId(d.getIdMunicipio());
-        } else if (d.getLugarProduccion() != null && d.getLugarProduccion().getMunicipio() != null) {
-            // Fallback: legacy path
-            r.setMunicipioId(d.getLugarProduccion().getMunicipio().getId());
-            r.setMunicipioNombre(d.getLugarProduccion().getMunicipio().getNombre());
+        // Municipio con nombre completo y departamento para cadena de ubicación AT
+        if (d.getMunicipio() != null) {
+            r.setMunicipioId(d.getMunicipio().getId());
+            r.setMunicipioNombre(d.getMunicipio().getNombre());
+            if (d.getMunicipio().getDepartamento() != null) {
+                r.setDepartamentoId(d.getMunicipio().getDepartamento().getId());
+                r.setDepartamentoNombre(d.getMunicipio().getDepartamento().getNombre());
+            }
         }
         return r;
     }
@@ -218,10 +221,7 @@ public class TerritorialWebMapper {
         r.setTotalLotes(d.totalLotes());
         r.setFechaCreacion(d.getFechaCreacion());
         r.setFechaActualizacion(d.getFechaActualizacion());
-        if (d.getPredio() != null) {
-            r.setPredioId(d.getPredio().getId());
-            r.setPredioNombre(d.getPredio().getNombre());
-        }
+        // Cultivo NO tiene relación directa con Predio
         if (d.getPlagas() != null) {
             r.setPlagas(d.getPlagas().stream().map(this::toResponse).collect(Collectors.toList()));
         }
@@ -285,9 +285,7 @@ public class TerritorialWebMapper {
         } else if (d.getIdLugar() != null) {
             r.setIdLugar(d.getIdLugar());
         }
-        if (d.getPlagas() != null) {
-            r.setPlagas(d.getPlagas().stream().map(this::toResponse).collect(Collectors.toList()));
-        }
+        // Lote NO tiene plagas directas — pertenecen al Cultivo
         return r;
     }
 

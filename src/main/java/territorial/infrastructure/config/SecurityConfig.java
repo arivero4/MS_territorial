@@ -30,6 +30,17 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+/**
+ * Configuración de seguridad Spring Security para ms-territorial.
+ *
+ * <p>Define las reglas de autorización por método HTTP y rol JWT:</p>
+ * <ul>
+ *   <li>GET — todos los roles autenticados.</li>
+ *   <li>POST/PUT/DELETE — ADMINISTRADOR, PROPIETARIO.</li>
+ * </ul>
+ *
+ * <p>La validación del JWT se realiza en {@link territorial.infrastructure.adapter.out.security.JwtAuthenticationAdapter}.</p>
+ */
 
 @Slf4j
 @Configuration

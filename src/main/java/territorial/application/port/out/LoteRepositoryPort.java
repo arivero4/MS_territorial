@@ -6,6 +6,12 @@ import territorial.domain.model.Lote;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Puerto de salida (repositorio) para la persistencia de lotes.
+ *
+ * <p>Implementado por
+ * {@link territorial.infrastructure.adapter.out.persistence.repository.LoteRepositoryAdapter}.</p>
+ */
 public interface LoteRepositoryPort {
 
     Lote guardar(Lote lote);

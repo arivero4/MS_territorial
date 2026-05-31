@@ -3,7 +3,6 @@ package territorial.application.service;
 import territorial.application.port.in.GestionarCultivoUseCase;
 import territorial.application.port.out.CultivoRepositoryPort;
 import territorial.application.port.out.PlagaRepositoryPort;
-import territorial.application.port.out.PredioRepositoryPort;
 import territorial.domain.exception.CultivoNoEncontradoException;
 import territorial.domain.model.Cultivo;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +13,15 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
 
+/**
+ * Servicio de aplicación que implementa {@link territorial.application.port.in.GestionarCultivoUseCase}.
+ *
+ * <p>Gestiona el catálogo de cultivos hortifrutícolas: creación, actualización, activación
+ * y asociación de plagas fitosanitarias a cada cultivo.</p>
+ *
+ * <p>{@code @Transactional} aplica a todos los métodos de escritura. Las consultas
+ * usan {@code readOnly = true} donde corresponde.</p>
+ */
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -21,13 +29,13 @@ import java.util.List;
 public class CultivoService implements GestionarCultivoUseCase {
 
     private final CultivoRepositoryPort cultivoRepository;
-    private final PredioRepositoryPort predioRepository;
+    // PredioRepositoryPort eliminado: Cultivo NO tiene relación directa con Predio
     private final PlagaRepositoryPort plagaRepository;
 
     @Override
     public Cultivo crear(Cultivo cultivo) {
         log.info("Creando cultivo: {}", cultivo.getNombreComun());
-        validarPredio(cultivo.getPredioId());
+        // Cultivo no valida predio — su jerarquía es: LugarProduccion → Lote → Cultivo
         if (cultivo.getFechaInicio() != null && cultivo.getFechaEstimadaCosecha() != null
                 && cultivo.getFechaEstimadaCosecha().isBefore(cultivo.getFechaInicio())) {
             throw new IllegalArgumentException(
@@ -46,10 +54,6 @@ public class CultivoService implements GestionarCultivoUseCase {
         log.info("Actualizando cultivo id: {}", id);
         Cultivo existente = cultivoRepository.buscarPorId(id)
                 .orElseThrow(() -> new CultivoNoEncontradoException(id));
-        if (cultivo.getPredioId() != null) {
-            validarPredio(cultivo.getPredioId());
-            existente.setPredio(cultivo.getPredio());
-        }
         existente.setNombreVariedad(cultivo.getNombreVariedad());
         existente.setNombreCientifico(cultivo.getNombreCientifico());
         existente.setNombreComun(cultivo.getNombreComun());
@@ -85,8 +89,8 @@ public class CultivoService implements GestionarCultivoUseCase {
     @Override
     @Transactional(readOnly = true)
     public List<Cultivo> listarPorPredio(Long predioId) {
-        validarPredio(predioId);
-        return cultivoRepository.buscarPorPredioId(predioId);
+        // Cultivo no tiene FK a Predio — retorna todos como fallback
+        return cultivoRepository.buscarTodos();
     }
 
     @Override
@@ -130,11 +134,5 @@ public class CultivoService implements GestionarCultivoUseCase {
         }
         cultivoRepository.desasociarPlaga(cultivoId, plagaId);
         return cultivoRepository.buscarPorId(cultivoId).orElseThrow();
-    }
-
-    private void validarPredio(Long predioId) {
-        if (predioId != null && !predioRepository.existePorId(predioId)) {
-            throw new IllegalArgumentException("Predio no encontrado con id: " + predioId);
-        }
     }
 }

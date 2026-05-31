@@ -12,6 +12,12 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+/**
+ * Servicio de aplicación que implementa {@link territorial.application.port.in.GestionarPlagaUseCase}.
+ *
+ * <p>Gestiona el catálogo de plagas fitosanitarias del sistema. Las plagas se asocian
+ * a cultivos específicos y son seleccionables por el AT durante las inspecciones.</p>
+ */
 @Slf4j
 @Service
 @RequiredArgsConstructor

@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+/** DTO de salida con datos del departamento y su codigo DANE. */
 
 @Data
 @Builder

@@ -2,10 +2,8 @@ package territorial.application.service;
 
 import territorial.application.port.in.GestionarLugarUseCase;
 import territorial.application.port.out.LugarRepositoryPort;
-import territorial.application.port.out.MunicipioRepositoryPort;
 import territorial.domain.exception.LugarNoEncontradoException;
 import territorial.domain.model.LugarProduccion;
-import territorial.domain.model.Municipio;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -14,6 +12,12 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
 
+/**
+ * Servicio de aplicación que implementa {@link territorial.application.port.in.GestionarLugarUseCase}.
+ *
+ * <p>Gestiona los lugares de producción (fincas). Un lugar de producción
+ * no tiene municipio directo; se ubica geográficamente navegando: Predio → Municipio.</p>
+ */
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -21,12 +25,11 @@ import java.util.List;
 public class LugarService implements GestionarLugarUseCase {
 
     private final LugarRepositoryPort lugarRepository;
-    private final MunicipioRepositoryPort municipioRepository;
 
     @Override
     public LugarProduccion crear(LugarProduccion lugar) {
         log.info("Creando lugar de producción: {}", lugar.getNombre());
-        validarMunicipio(lugar.getMunicipioId());
+        // LugarProduccion NO tiene municipio directo — se vincula a través de Predio
         lugar.setActivo(true);
         lugar.setFechaCreacion(LocalDateTime.now());
         lugar.setFechaActualizacion(LocalDateTime.now());
@@ -40,10 +43,6 @@ public class LugarService implements GestionarLugarUseCase {
         log.info("Actualizando lugar de producción id: {}", id);
         LugarProduccion existente = lugarRepository.buscarPorId(id)
                 .orElseThrow(() -> new LugarNoEncontradoException(id));
-        if (lugar.getMunicipioId() != null) {
-            validarMunicipio(lugar.getMunicipioId());
-            existente.setMunicipio(lugar.getMunicipio());
-        }
         existente.setNombre(lugar.getNombre());
         existente.setDescripcion(lugar.getDescripcion());
         existente.setArea(lugar.getArea());
@@ -78,8 +77,8 @@ public class LugarService implements GestionarLugarUseCase {
     @Override
     @Transactional(readOnly = true)
     public List<LugarProduccion> listarPorMunicipio(Long municipioId) {
-        validarMunicipio(municipioId);
-        return lugarRepository.buscarPorMunicipioId(municipioId);
+        // LugarProduccion ya no tiene FK a municipio. Retorna todos como fallback.
+        return lugarRepository.buscarTodos();
     }
 
     @Override
@@ -98,9 +97,4 @@ public class LugarService implements GestionarLugarUseCase {
         return lugarRepository.guardar(lugar);
     }
 
-    private void validarMunicipio(Long municipioId) {
-        if (municipioId != null && !municipioRepository.existePorId(municipioId)) {
-            throw new IllegalArgumentException("Municipio no encontrado con id: " + municipioId);
-        }
-    }
 }

@@ -16,6 +16,11 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
+/**
+ * Controlador REST para la gestión de municipios.
+ *
+ * <p>Base URL: {@code /api/territorial/municipios}.</p>
+ */
 
 @RestController
 @RequestMapping("/municipios")

@@ -19,6 +19,13 @@ import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
+/**
+ * Manejador global de excepciones de la capa web.
+ *
+ * <p>Captura excepciones de dominio ({@code *NoEncontradoException}) y las
+ * convierte en respuestas HTTP con el código de estado apropiado (404, 400, 500).
+ * Evita que los stack traces lleguen al cliente en producción.</p>
+ */
 
 @RestControllerAdvice
 @Slf4j

@@ -11,6 +11,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+/** RowMapper JDBC auxiliar para consultas nativas sobre Oracle en ms-territorial. */
 
 @Component
 public class TerritorialRowMapper {

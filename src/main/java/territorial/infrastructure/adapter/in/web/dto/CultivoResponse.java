@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+/** DTO de salida con los datos del cultivo y sus plagas asociadas. */
 
 @Data
 @Builder
@@ -24,9 +25,8 @@ public class CultivoResponse {
     private LocalDate fechaEstimadaCosecha;
     private Boolean activo;
     private Boolean enTemporada;
-    private Long predioId;
-    private String predioNombre;
     private Integer totalLotes;
+    // predioId y predioNombre eliminados: Cultivo NO tiene relación directa con Predio
     private List<PlagaResponse> plagas;
     private LocalDateTime fechaCreacion;
     private LocalDateTime fechaActualizacion;

@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+/** DTO de salida con municipio y datos del departamento asociado. */
 
 @Data
 @Builder

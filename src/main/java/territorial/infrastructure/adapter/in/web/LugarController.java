@@ -15,6 +15,11 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
+/**
+ * Controlador REST que expone los endpoints de gestión de lugares de producción.
+ *
+ * <p>Base URL: {@code /api/territorial/lugares}.</p>
+ */
 
 @RestController
 @RequestMapping("/lugares")

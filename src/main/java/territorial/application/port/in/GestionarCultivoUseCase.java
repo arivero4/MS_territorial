@@ -4,6 +4,14 @@ import territorial.domain.model.Cultivo;
 
 import java.util.List;
 
+/**
+ * Puerto de entrada (caso de uso) para la gestión del catálogo de cultivos.
+ *
+ * <p>Define las operaciones CRUD y de ciclo de vida de los cultivos hortifrutícolas.
+ * Implementado por {@link territorial.application.service.CultivoService}.</p>
+ *
+ * <p>Los cultivos se asignan a los lotes y tienen plagas fitosanitarias asociadas.</p>
+ */
 public interface GestionarCultivoUseCase {
 
     Cultivo crear(Cultivo cultivo);

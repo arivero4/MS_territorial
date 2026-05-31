@@ -10,6 +10,15 @@ import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Date;
 import java.util.List;
+/**
+ * Filtro de autenticación JWT para ms-territorial.
+ *
+ * <p>Lee el token Bearer del header {@code Authorization}, lo valida con la clave secreta
+ * compartida y extrae el claim {@code grupos} para poblar el {@code SecurityContext}
+ * de Spring Security.</p>
+ *
+ * <p>La clave JWT debe coincidir con la usada por ms-usuarios para emitir los tokens.</p>
+ */
 
 @Slf4j
 @Component

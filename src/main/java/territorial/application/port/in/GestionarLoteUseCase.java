@@ -5,6 +5,13 @@ import territorial.domain.model.Lote;
 
 import java.util.List;
 
+/**
+ * Puerto de entrada (caso de uso) para la gestión de lotes de cultivo.
+ *
+ * <p>Maneja el ciclo de vida completo de un lote: creación, cambio de estado
+ * (ACTIVO → EN_PRODUCCION → COSECHADO), eliminación y consulta.
+ * Implementado por {@link territorial.application.service.LoteService}.</p>
+ */
 public interface GestionarLoteUseCase {
 
     Lote crear(Lote lote);

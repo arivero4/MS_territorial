@@ -11,6 +11,16 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+/**
+ * Servicio de consulta transversal que implementa {@link territorial.application.port.in.ConsultarTerritorialUseCase}.
+ *
+ * <p>Provee operaciones de solo lectura ({@code @Transactional(readOnly = true)}) para
+ * obtener la cadena completa de ubicación: Departamento → Municipio → Predio
+ * → LugarProduccion → Lote → Cultivo → Plaga.</p>
+ *
+ * <p>Usado principalmente por el dashboard del Asistente Técnico para mostrar
+ * la ubicación de cada inspección asignada.</p>
+ */
 @Slf4j
 @Service
 @RequiredArgsConstructor

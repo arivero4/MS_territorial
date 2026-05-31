@@ -7,6 +7,7 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+/** Entidad JPA mapeada a la tabla Oracle LUGAR_PRODUCCION. OneToMany hacia LoteEntity. */
 
 @Data
 @NoArgsConstructor

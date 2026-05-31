@@ -15,6 +15,12 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
+/**
+ * Controlador REST que expone los endpoints de gestión de predios rurales.
+ *
+ * <p>Base URL: {@code /api/territorial/predios}. Devuelve la cadena de ubicación
+ * completa: municipio, departamento y lugar de producción.</p>
+ */
 
 @RestController
 @RequestMapping("/predios")

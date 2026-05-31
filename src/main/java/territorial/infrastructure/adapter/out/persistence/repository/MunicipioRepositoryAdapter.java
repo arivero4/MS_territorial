@@ -13,6 +13,7 @@ import javax.persistence.EntityManager;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+/** Adaptador JPA que implementa MunicipioRepositoryPort sobre Oracle 10g. */
 
 @Repository
 @RequiredArgsConstructor

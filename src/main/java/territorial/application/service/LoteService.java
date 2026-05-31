@@ -16,6 +16,14 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
 
+/**
+ * Servicio de aplicación que implementa {@link territorial.application.port.in.GestionarLoteUseCase}.
+ *
+ * <p>Gestiona el ciclo de vida completo de los lotes: creación, cambio de estado
+ * (ACTIVO → EN_PRODUCCION → COSECHADO/ABANDONADO), asociación de plagas y eliminación.</p>
+ *
+ * <p>Valida la existencia del cultivo antes de crear o actualizar un lote.</p>
+ */
 @Slf4j
 @Service
 @RequiredArgsConstructor

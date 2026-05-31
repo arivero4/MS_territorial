@@ -8,6 +8,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+/** Entidad JPA mapeada a la tabla Oracle CULTIVO. OneToMany hacia LoteEntity y PlagaEntity. */
 
 @Data
 @NoArgsConstructor

@@ -8,6 +8,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+/** Entidad JPA mapeada a la tabla Oracle LOTE. FKs: ID_LUGAR (LugarEntity) e ID_CULTIVO (CultivoEntity). */
 
 @Data
 @NoArgsConstructor

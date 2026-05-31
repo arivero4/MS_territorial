@@ -15,6 +15,13 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
+/**
+ * Controlador REST que expone los endpoints del catálogo de cultivos.
+ *
+ * <p>Base URL: {@code /api/territorial/cultivos}. Todos los métodos requieren
+ * autenticación JWT. Las operaciones de escritura están restringidas a los roles
+ * ADMINISTRADOR y PROPIETARIO.</p>
+ */
 
 @RestController
 @RequestMapping("/cultivos")

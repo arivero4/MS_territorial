@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+/** DTO de salida con predio: municipio, departamento y lugar de produccion. */
 
 @Data
 @Builder
@@ -28,6 +29,8 @@ public class PredioResponse {
     private String lugarProduccionNombre;
     private Long municipioId;
     private String municipioNombre;
+    private Long departamentoId;
+    private String departamentoNombre;
     private LocalDateTime fechaCreacion;
     private LocalDateTime fechaActualizacion;
 }

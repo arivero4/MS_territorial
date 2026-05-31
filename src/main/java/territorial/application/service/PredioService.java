@@ -13,6 +13,12 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
 
+/**
+ * Servicio de aplicación que implementa {@link territorial.application.port.in.GestionarPredioUseCase}.
+ *
+ * <p>Gestiona los predios rurales. Valida la existencia del lugar de producción
+ * y la unicidad del número predial antes de persistir.</p>
+ */
 @Slf4j
 @Service
 @RequiredArgsConstructor

@@ -2,6 +2,15 @@ package territorial.domain.valueobject;
 
 import java.util.Objects;
 
+/**
+ * Value Object inmutable que representa coordenadas geográficas (latitud, longitud, altitud).
+ *
+ * <p>Encapsula y valida las coordenadas de predios y lugares de producción.
+ * Inmutable: todos los campos son {@code final}. La igualdad se basa en valores.</p>
+ *
+ * <p>Crear instancias solo con los factory methods {@link #de(Double, Double)}
+ * o {@link #de(Double, Double, Double)}.</p>
+ */
 public final class Coordenadas {
 
     private final Double latitud;

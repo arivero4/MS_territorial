@@ -9,6 +9,12 @@ import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+/**
+ * Configura Swagger/OpenAPI 3 para la documentación de la API REST.
+ *
+ * <p>Acceso en desarrollo: {@code http://localhost:8082/swagger-ui.html}.</p>
+ * <p>Deshabilitado automáticamente en perfil {@code prod} por configuración YAML.</p>
+ */
 
 @Configuration
 public class SwaggerConfig {

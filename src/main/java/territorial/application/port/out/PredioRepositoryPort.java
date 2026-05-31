@@ -5,6 +5,12 @@ import territorial.domain.model.Predio;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Puerto de salida (repositorio) para la persistencia de predios.
+ *
+ * <p>Implementado por
+ * {@link territorial.infrastructure.adapter.out.persistence.repository.PredioRepositoryAdapter}.</p>
+ */
 public interface PredioRepositoryPort {
 
     Predio guardar(Predio predio);

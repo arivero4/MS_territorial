@@ -13,6 +13,7 @@ import java.util.List;
 @Entity
 @Table(name = "DEPARTAMENTO",
         uniqueConstraints = @UniqueConstraint(name = "UK_DEPT_CODIGO_DANE", columnNames = "CODIGO_DANE"))
+/** Entidad JPA mapeada a la tabla Oracle DEPARTAMENTO del esquema territorial. */
 public class DepartamentoEntity {
 
     @Id

@@ -14,6 +14,7 @@ import javax.persistence.EntityManager;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+/** Adaptador JPA que implementa LoteRepositoryPort. Gestiona ciclo de vida de lotes. */
 
 @Repository
 @RequiredArgsConstructor

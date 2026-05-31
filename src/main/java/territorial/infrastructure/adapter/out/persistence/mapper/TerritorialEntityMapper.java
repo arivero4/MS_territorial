@@ -93,7 +93,7 @@ public class TerritorialEntityMapper {
 
     public Predio toDomain(PredioEntity e) {
         if (e == null) return null;
-        Predio.PredioBuilder b = Predio.builder()
+        return Predio.builder()
                 .id(e.getId())
                 .nombre(e.getNombre())
                 .numeroPredial(e.getNumeroPredial())
@@ -101,12 +101,9 @@ public class TerritorialEntityMapper {
                 .vereda(e.getVereda())
                 .coordenadas(buildCoordenadas(e.getLatitud(), e.getLongitud(), null))
                 .lugarProduccion(toDomain(e.getLugarProduccion()))
-                .activo(true);
-        // Incluir idMunicipio del nuevo esquema (predio.id_municipio FK)
-        if (e.getMunicipio() != null) {
-            b.idMunicipio(e.getMunicipio().getId());
-        }
-        return b.build();
+                .municipio(toDomain(e.getMunicipio()))   // Municipio completo con nombre y departamento
+                .activo(true)
+                .build();
     }
 
     public PredioEntity toEntity(Predio d) {
@@ -129,11 +126,8 @@ public class TerritorialEntityMapper {
         if (d.getLugarProduccion() != null) {
             e.setLugarProduccion(toEntity(d.getLugarProduccion()));
         }
-        // Map id_municipio FK (diccionario: predio.id_municipio required)
-        if (d.getIdMunicipio() != null) {
-            MunicipioEntity m = new MunicipioEntity();
-            m.setId(d.getIdMunicipio());
-            e.setMunicipio(m);
+        if (d.getMunicipio() != null) {
+            e.setMunicipio(toEntity(d.getMunicipio()));
         }
         return e;
     }
